@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:ticket_widget/enum.dart';
+part of ticket;
 
 class TicketClipper extends CustomClipper<Path> {
   static const double clipPadding = 18;

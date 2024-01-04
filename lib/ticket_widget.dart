@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:ticket_widget/enum.dart';
-import 'package:ticket_widget/ticket_cliper.dart';
+part of ticket;
 
 class Ticket extends StatelessWidget {
   final double margin;
