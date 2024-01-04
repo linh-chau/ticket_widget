@@ -1,4 +1,12 @@
-part of ticket;
+library ticket;
+
+import 'package:flutter/material.dart';
+
+part 'ticket_cliper.dart';
+
+enum CardType { image }
+
+enum CardPosition { horizontal, vertical }
 
 class Ticket extends StatelessWidget {
   final double margin;
