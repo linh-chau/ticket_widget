@@ -51,7 +51,7 @@ class Ticket extends StatelessWidget {
           clipRadius: clipRadius,
           smallClipRadius: smallClipRadius,
           numberOfSmallClips: numberOfSmallClips,
-          cardPosition: CardPosition.vertical,
+          cardPosition: cardPosition,
         ),
         child: Container(
           color: backgroundColor,

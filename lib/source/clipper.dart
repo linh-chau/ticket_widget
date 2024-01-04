@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:ticket_widget_plus/ticket.dart';
 
@@ -138,9 +137,9 @@ class TicketClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(TicketClipper oldClipper) =>
-      oldClipper.borderRadius != borderRadius ||
-      oldClipper.clipRadius != clipRadius ||
-      oldClipper.smallClipRadius != smallClipRadius ||
-      oldClipper.numberOfSmallClips != numberOfSmallClips;
+  bool shouldReclip(TicketClipper oldClipper) => true;
+  // oldClipper.borderRadius != borderRadius ||
+  // oldClipper.clipRadius != clipRadius ||
+  // oldClipper.smallClipRadius != smallClipRadius ||
+  // oldClipper.numberOfSmallClips != numberOfSmallClips;
 }
