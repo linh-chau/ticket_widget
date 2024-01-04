@@ -11,6 +11,7 @@ class Ticket extends StatelessWidget {
   final Color backgroundColor;
   final Widget child;
   final List<BoxShadow>? boxShadow;
+  final double circlePosition;
 
   const Ticket({
     Key? key,
@@ -23,6 +24,7 @@ class Ticket extends StatelessWidget {
     this.backgroundColor = Colors.blue,
     this.boxShadow,
     required this.child,
+    this.circlePosition = 0.2,
   }) : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class Ticket extends StatelessWidget {
       ),
       child: ClipPath(
         clipper: TicketClipper(
+          circlePosition: circlePosition,
           borderRadius: borderRadius,
           clipRadius: clipRadius,
           smallClipRadius: smallClipRadius,

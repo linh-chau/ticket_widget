@@ -9,6 +9,7 @@ class TicketClipper extends CustomClipper<Path> {
   final double smallClipRadius;
   final int numberOfSmallClips;
   final CardPosition cardPosition;
+  final double circlePosition;
 
   const TicketClipper({
     required this.borderRadius,
@@ -16,6 +17,7 @@ class TicketClipper extends CustomClipper<Path> {
     required this.smallClipRadius,
     required this.numberOfSmallClips,
     required this.cardPosition,
+    required this.circlePosition,
   });
 
   RRect rect(Size size) {
@@ -34,8 +36,8 @@ class TicketClipper extends CustomClipper<Path> {
   }
 
   List<Rect> circle(Size size) {
-    final clipCenterY = size.height * 0.2 + clipRadius;
-    final clipCenterX = size.width * 0.2 + clipRadius;
+    final clipCenterY = size.height * circlePosition + clipRadius;
+    final clipCenterX = size.width * circlePosition + clipRadius;
     switch (cardPosition) {
       case CardPosition.horizontal:
         return [
@@ -63,7 +65,7 @@ class TicketClipper extends CustomClipper<Path> {
   }
 
   List<Offset> _horizontalChip(Size size) {
-    final clipCenterY = size.height * 0.2 + clipRadius;
+    final clipCenterY = size.height * circlePosition + clipRadius;
     final clipContainerSize = size.width - clipRadius * 2 - clipPadding * 2;
     final smallClipSize = smallClipRadius * 2;
     final smallClipBoxSize = clipContainerSize / numberOfSmallClips;
@@ -79,7 +81,7 @@ class TicketClipper extends CustomClipper<Path> {
   }
 
   List<Offset> _verticalChip(Size size) {
-    final clipCenterX = size.width * 0.2 + clipRadius;
+    final clipCenterX = size.width * circlePosition+ clipRadius;
     final clipContainerSize = size.height - clipRadius * 2 - clipPadding * 2;
     final smallClipSize = smallClipRadius * 2;
     final smallClipBoxSize = clipContainerSize / numberOfSmallClips;
