@@ -1,4 +1,4 @@
-part of 'ticket.dart';
+part of ticket;
 
 enum CardType {
   image,
