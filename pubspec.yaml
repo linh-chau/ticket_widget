@@ -1,7 +1,7 @@
 name: ticket_widget
 description: A UI Packpage make a view like ticket
 version: 1.0.0
-homepage:
+homepage: https://github.com/linhchau1998/ticket_widget
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
