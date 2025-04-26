@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ticket_widget_plus/ticket.dart';
 
 class Ticket extends StatelessWidget {
-  final double margin;
+  final EdgeInsets padding;
   final double borderRadius;
   final double clipRadius;
   final double smallClipRadius;
@@ -12,10 +12,12 @@ class Ticket extends StatelessWidget {
   final Widget child;
   final List<BoxShadow>? boxShadow;
   final double circlePosition;
+  final double ticketWidth;
+  final double ticketHeight;
 
   const Ticket({
     Key? key,
-    this.margin = 20,
+    this.padding = const EdgeInsets.symmetric(horizontal: 10),
     this.borderRadius = 10,
     this.clipRadius = 10,
     this.smallClipRadius = 4,
@@ -23,30 +25,18 @@ class Ticket extends StatelessWidget {
     this.cardPosition = CardPosition.horizontal,
     this.backgroundColor = Colors.blue,
     this.boxShadow,
+    this.ticketWidth = 350,
+    this.ticketHeight = 500,
     required this.child,
     this.circlePosition = 0.2,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final ticketWidth = screenSize.width - margin * 2;
-    final ticketHeight = ticketWidth * 1.02;
-
     return Container(
       width: ticketWidth,
       height: ticketHeight,
-      decoration: BoxDecoration(
-        boxShadow: boxShadow ??
-            [
-              BoxShadow(
-                offset: const Offset(0, 4),
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 5,
-                spreadRadius: 2,
-              ),
-            ],
-      ),
+      decoration: BoxDecoration(boxShadow: boxShadow),
       child: ClipPath(
         clipper: TicketClipper(
           circlePosition: circlePosition,
@@ -58,6 +48,7 @@ class Ticket extends StatelessWidget {
         ),
         child: Container(
           color: backgroundColor,
+          padding: padding,
           child: child,
         ),
       ),

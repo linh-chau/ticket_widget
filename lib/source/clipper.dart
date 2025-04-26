@@ -140,8 +140,4 @@ class TicketClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(TicketClipper oldClipper) => true;
-  // oldClipper.borderRadius != borderRadius ||
-  // oldClipper.clipRadius != clipRadius ||
-  // oldClipper.smallClipRadius != smallClipRadius ||
-  // oldClipper.numberOfSmallClips != numberOfSmallClips;
 }
