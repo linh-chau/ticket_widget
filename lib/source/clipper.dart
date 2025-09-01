@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_widget_plus/ticket.dart';
 
+/// A [CustomClipper] that creates a **ticket-style shape**.
+///
+/// Supports both vertical and horizontal layouts with:
+/// - Rounded or straight borders
+/// - Large circular cutouts (sides/top/bottom)
+/// - Optional small "torn" holes for a perforated effect
+///
+/// Typically used together with [ClipPath] to create
+/// widgets resembling tickets, boarding passes, or vouchers.
 class TicketClipper extends CustomClipper<Path> {
+  /// Padding from the edge before small clips start.
   static const double clipPadding = 18;
 
+  /// The corner radius of the main ticket rectangle.
   final double borderRadius;
+
+  /// The radius of the main circular cutouts
+  /// (sides for horizontal, top/bottom for vertical).
   final double clipRadius;
+
+  /// The radius of the small perforated circles.
   final double smallClipRadius;
+
+  /// The total number of small perforated circles to draw.
   final int numberOfSmallClips;
+
+  /// Defines the layout orientation of the ticket
+  /// ([CardPosition.horizontal] or [CardPosition.vertical]).
   final CardPosition cardPosition;
+
+  /// Position (0–1) along the width/height where the main circle is drawn.
   final double circlePosition;
 
+  /// Creates a new [TicketClipper] with the given configuration.
   const TicketClipper({
     required this.borderRadius,
     required this.clipRadius,
@@ -20,50 +44,36 @@ class TicketClipper extends CustomClipper<Path> {
     required this.circlePosition,
   });
 
+  /// Returns a rounded rectangle that represents the base shape of the ticket.
   RRect rect(Size size) {
-    switch (cardPosition) {
-      case CardPosition.horizontal:
-        return RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(borderRadius),
-        );
-      case CardPosition.vertical:
-        return RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(borderRadius),
-        );
-    }
+    return RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Radius.circular(borderRadius),
+    );
   }
 
+  /// Returns the two large circular cutouts (either left/right or top/bottom).
   List<Rect> circle(Size size) {
     final clipCenterY = size.height * circlePosition + clipRadius;
     final clipCenterX = size.width * circlePosition + clipRadius;
+
     switch (cardPosition) {
       case CardPosition.horizontal:
         return [
+          Rect.fromCircle(center: Offset(0, clipCenterY), radius: clipRadius),
           Rect.fromCircle(
-            center: Offset(0, clipCenterY),
-            radius: clipRadius,
-          ),
-          Rect.fromCircle(
-            center: Offset(size.width, clipCenterY),
-            radius: clipRadius,
-          )
+              center: Offset(size.width, clipCenterY), radius: clipRadius),
         ];
       case CardPosition.vertical:
         return [
+          Rect.fromCircle(center: Offset(clipCenterX, 0), radius: clipRadius),
           Rect.fromCircle(
-            center: Offset(clipCenterX, 0),
-            radius: clipRadius,
-          ),
-          Rect.fromCircle(
-            center: Offset(clipCenterX, size.height),
-            radius: clipRadius,
-          )
+              center: Offset(clipCenterX, size.height), radius: clipRadius),
         ];
     }
   }
 
+  /// Calculates small perforated holes for a **horizontal ticket**.
   List<Offset> _horizontalChip(Size size) {
     final clipCenterY = size.height * circlePosition + clipRadius;
     final clipContainerSize = size.width - clipRadius * 2 - clipPadding * 2;
@@ -75,13 +85,13 @@ class TicketClipper extends CustomClipper<Path> {
     return List.generate(numberOfSmallClips, (index) {
       final boxX = smallClipStart + smallClipBoxSize * index;
       final centerX = boxX + smallClipPadding + smallClipRadius;
-
       return Offset(centerX, clipCenterY);
     });
   }
 
+  /// Calculates small perforated holes for a **vertical ticket**.
   List<Offset> _verticalChip(Size size) {
-    final clipCenterX = size.width * circlePosition+ clipRadius;
+    final clipCenterX = size.width * circlePosition + clipRadius;
     final clipContainerSize = size.height - clipRadius * 2 - clipPadding * 2;
     final smallClipSize = smallClipRadius * 2;
     final smallClipBoxSize = clipContainerSize / numberOfSmallClips;
@@ -91,12 +101,12 @@ class TicketClipper extends CustomClipper<Path> {
     return List.generate(numberOfSmallClips, (index) {
       final boxY = smallClipStart + smallClipBoxSize * index;
       final centerY = boxY + smallClipPadding + smallClipRadius;
-
       return Offset(clipCenterX, centerY);
     });
   }
 
-  List<Offset> _getsmallChip(Size size) {
+  /// Returns the perforated holes depending on [cardPosition].
+  List<Offset> _getSmallChip(Size size) {
     switch (cardPosition) {
       case CardPosition.horizontal:
         return _horizontalChip(size);
@@ -105,37 +115,23 @@ class TicketClipper extends CustomClipper<Path> {
     }
   }
 
+  /// Builds the final ticket path by combining
+  /// the base rectangle, large circles, and small perforations.
   @override
   Path getClip(Size size) {
-    var path = Path();
+    var path = Path()..addRRect(rect(size));
 
-    // draw rect vertical
-    path.addRRect(rect(size));
+    final clipPath = Path()
+      ..addOval(circle(size).first)
+      ..addOval(circle(size).last);
 
-    final clipPath = Path();
-
-    // circle on the left
-    clipPath.addOval(circle(size).first);
-    // circle on the right
-    clipPath.addOval(circle(size).last);
-
-    // draw small clip circles
-    var smallClipCenterOffsets = _getsmallChip(size);
-    for (var centerOffset in smallClipCenterOffsets) {
-      clipPath.addOval(Rect.fromCircle(
-        center: centerOffset,
-        radius: smallClipRadius,
-      ));
+    // Add small perforated holes
+    for (var centerOffset in _getSmallChip(size)) {
+      clipPath.addOval(
+          Rect.fromCircle(center: centerOffset, radius: smallClipRadius));
     }
 
-    // combine two path together
-    final ticketPath = Path.combine(
-      PathOperation.reverseDifference,
-      clipPath,
-      path,
-    );
-
-    return ticketPath;
+    return Path.combine(PathOperation.reverseDifference, clipPath, path);
   }
 
   @override

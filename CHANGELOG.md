@@ -1,3 +1,11 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+* Describe initial release.
+
+## 1.0.4
+
+* Update function
+
+## 1.0.5
+
+* Updated docs and comments
