@@ -1,6 +1,6 @@
 name: ticket_widget_plus
-description: A UI Packpage make a view like ticket
-version: 1.0.5
+description: A Flutter package for creating customizable ticket-style widgets — ideal for movie tickets, boarding passes, vouchers, and more.
+version: 1.0.6
 homepage: https://github.com/linhchau1998/ticket_widget
 
 environment:

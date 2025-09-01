@@ -9,3 +9,7 @@
 ## 1.0.5
 
 * Updated docs and comments
+
+## 1.0.6
+
+* Updated docs and comments
